@@ -85,7 +85,7 @@ def candle(wxs_file, flags=[])
   flags_string << " -dPlatform=#{ENV['ARCH']}"
   flags_string << " " << variable_define_flags
   Dir.chdir File.join(TOPDIR, File.dirname(wxs_file)) do
-    sh "candle -ext WiXUtilExtension -ext WixUIExtension -arch #{ENV['ARCH']} #{flags_string} \"#{File.basename(wxs_file)}\""
+    sh "\"C:\\Program Files (x86)\\Windows Installer XML v3.5\\bin\\candle.exe\" -ext WiXUtilExtension -ext WixUIExtension -arch #{ENV['ARCH']} #{flags_string} \"#{File.basename(wxs_file)}\""
   end
 end
 
@@ -103,7 +103,7 @@ def heat(wxs_file, stage_dir)
     # parent puppet.wxs file.  Otherwise, WiX won't be able to graft the
     # fragment into the right place in the package.
     dir_ref = 'INSTALLDIR' if dir_ref == 'stagedir'
-    sh "heat dir #{stage_dir} -v -ke -indent 2 -cg #{cg_name} -gg -dr #{dir_ref} -t \"#{filters_xslt}\" -var var.StageDir -out #{wxs_file}"
+    sh "\"C:\\Program Files (x86)\\Windows Installer XML v3.5\\bin\\heat.exe\" dir #{stage_dir} -v -ke -indent 2 -cg #{cg_name} -gg -dr #{dir_ref} -t \"#{filters_xslt}\" -var var.StageDir -out #{wxs_file}"
   end
 end
 
@@ -282,7 +282,7 @@ namespace :windows do
   task :msi => [:wixobj, :wixobj_ui, :version] do
     OBJS = FileList['wix/**/*.wixobj']
     Dir.chdir TOPDIR do
-      sh "light -ext WiXUtilExtension -ext WixUIExtension -cultures:en-us -loc wix/localization/puppet_en-us.wxl -out pkg/#{ENV['PKG_FILE_NAME']} #{OBJS}"
+      sh "\"C:\\Program Files (x86)\\Windows Installer XML v3.5\\bin\\light.exe\" -ext WiXUtilExtension -ext WixUIExtension -cultures:en-us -loc wix/localization/puppet_en-us.wxl -out pkg/#{ENV['PKG_FILE_NAME']} #{OBJS}"
     end
   end
 
@@ -309,7 +309,7 @@ namespace :windows do
     if not ENV['AGENT_VERSION_STRING']
       puts "Warning: AGENT_VERSION_STRING is not set in the environment.  Defaulting to 1.0.0"
       ENV['AGENT_VERSION_STRING'] = '1.0.0'
-      ENV['PKG_FILE_NAME'] = "puppet-agent-#{ENV['AGENT_VERSION_STRING']}-#{ENV['ARCH']}.msi"
+      ENV['PKG_FILE_NAME'] = "puppet-agent-#{ENV['AGENT_VERSION_STRING']}-#{ENV['ARCH']}.msi".gsub(/\s+/, "")
     end
     Rake::Task["windows:msi"].invoke
   end
