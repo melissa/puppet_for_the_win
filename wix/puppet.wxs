@@ -360,6 +360,7 @@
             <Directory Id="EnvironmentsDir" Name="environments">
               <Component Id="EnvironmentsDir" Permanent="yes" Guid="6a6a390a-8783-40b6-b49d-9e2b368e069d">
                 <CreateFolder />
+                <File Id="EnvironmentConf" KeyPath="yes" Source="stagedir\puppet\conf\environment.conf" />
               </Component>
               <Directory Id="ProductionDir" Name="production">
                 <Component Id="ProductionDir" Permanent="yes" Guid="b902efcd-756e-4340-8f13-5a79d46b93c7">
